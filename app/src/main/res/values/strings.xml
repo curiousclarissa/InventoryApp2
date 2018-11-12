@@ -16,6 +16,10 @@
 
     <!-- Label for overflow menu option that inserts fake product data into the app [CHAR LIMIT=20] -->
     <string name="action_insert_dummy_data">Insert Dummy Data</string>
+    <!-- Label for add product button [CHAR LIMIT=20] -->
+    <string name="button_add">Add</string>
+    <!-- Label for sale product button [CHAR LIMIT=20] -->
+    <string name="button_sale">Sale</string>
 
     <!-- Label for overflow menu option that deletes all product data in the app [CHAR LIMIT=20] -->
     <string name="action_delete_all_entries">Delete All Products</string>
@@ -62,13 +66,13 @@
     <string name="unit_product_price">dollars</string>
 
     <!-- Label for dropdown menu option if the pet's gender is unknown [CHAR LIMIT=20] -->
-    <string name="gender_unknown">Unknown</string>
+    <string name="type_unknown">Unknown</string>
 
     <!-- Label for dropdown menu option if the pet is male [CHAR LIMIT=20] -->
-    <string name="gender_male">Male</string>
+    <string name="type_grocery">Grocery</string>
 
     <!-- Label for dropdown menu option if the pet is female [CHAR LIMIT=20] -->
-    <string name="gender_female">Female</string>
+    <string name="type_goods">Non Food Goods</string>
     <!-- Label for failed adding product in editor -->
     <string name="editor_insert_product_failed">Error with saving product</string>
     <!-- Label for success adding product in editor -->

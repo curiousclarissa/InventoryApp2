@@ -67,7 +67,7 @@ public class EditorActivity extends AppCompatActivity implements
     private EditText mQuantityEditText;
 
     /** EditText field to enter the pet's gender */
-    private Spinner mGenderSpinner;
+    private Spinner mTypeSpinner;
 
     /**
      * Gender of the pet. The possible valid values are in the ProductContract.java file:
@@ -121,13 +121,13 @@ public class EditorActivity extends AppCompatActivity implements
         mSupplierEditText = (EditText) findViewById(R.id.edit_product_supplier);
         mPriceEditText = (EditText) findViewById(R.id.edit_pet_price);
         mQuantityEditText = (EditText) findViewById(R.id.edit_product_quantity);
-        mGenderSpinner = (Spinner) findViewById(R.id.spinner_gender);
+        mTypeSpinner = (Spinner) findViewById(R.id.spinner_type);
 
         mNameEditText.setOnTouchListener(localTouchListener);
         mSupplierEditText.setOnTouchListener(localTouchListener);
         mPriceEditText.setOnTouchListener(localTouchListener);
         mQuantityEditText.setOnTouchListener(localTouchListener);
-        mGenderSpinner.setOnTouchListener(localTouchListener);
+        mTypeSpinner.setOnTouchListener(localTouchListener);
 
         setupSpinner();
     }
@@ -139,23 +139,23 @@ public class EditorActivity extends AppCompatActivity implements
         // Create adapter for spinner. The list options are from the String array it will use
         // the spinner will use the default layout
         ArrayAdapter genderSpinnerAdapter = ArrayAdapter.createFromResource(this,
-                R.array.array_gender_options, android.R.layout.simple_spinner_item);
+                R.array.array_type_options, android.R.layout.simple_spinner_item);
 
         // Specify dropdown layout style - simple list view with 1 item per line
         genderSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 
         // Apply the adapter to the spinner
-        mGenderSpinner.setAdapter(genderSpinnerAdapter);
+        mTypeSpinner.setAdapter(genderSpinnerAdapter);
 
         // Set the integer mSelected to the constant values
-        mGenderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selection = (String) parent.getItemAtPosition(position);
                 if (!TextUtils.isEmpty(selection)) {
-                    if (selection.equals(getString(R.string.gender_male))) {
+                    if (selection.equals(getString(R.string.type_grocery))) {
                         mGender = ProductEntry.GENDER_MALE;
-                    } else if (selection.equals(getString(R.string.gender_female))) {
+                    } else if (selection.equals(getString(R.string.type_goods))) {
                         mGender = ProductEntry.GENDER_FEMALE;
                     } else {
                         mGender = ProductContract.ProductEntry.GENDER_UNKNOWN;
@@ -393,13 +393,13 @@ public class EditorActivity extends AppCompatActivity implements
             // Then call setSelection() so that option is displayed on screen as the current selection.
             switch (gender) {
                 case ProductContract.ProductEntry.GENDER_MALE:
-                    mGenderSpinner.setSelection(1);
+                    mTypeSpinner.setSelection(1);
                     break;
                 case ProductEntry.GENDER_FEMALE:
-                    mGenderSpinner.setSelection(2);
+                    mTypeSpinner.setSelection(2);
                     break;
                 default:
-                    mGenderSpinner.setSelection(0);
+                    mTypeSpinner.setSelection(0);
                     break;
             }
         }
@@ -413,7 +413,7 @@ public class EditorActivity extends AppCompatActivity implements
         mSupplierEditText.setText("");
         mPriceEditText.setText("");
         mQuantityEditText.setText("");
-        mGenderSpinner.setSelection(0); // Select "Unknown" gender
+        mTypeSpinner.setSelection(0); // Select "Unknown" gender
 
     }
     @Override
