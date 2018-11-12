@@ -54,14 +54,17 @@ public class EditorActivity extends AppCompatActivity implements
     /** Content URI for the existing pet (null if it's a new pet) */
     private Uri localCurrentProductUri;
 
-    /** EditText field to enter the pet's name */
+    /** EditText field to enter the product name */
     private EditText mNameEditText;
 
-    /** EditText field to enter the pet's breed */
-    private EditText mBreedEditText;
+    /** EditText field to enter the product supplier */
+    private EditText mSupplierEditText;
 
-    /** EditText field to enter the pet's weight */
-    private EditText mWeightEditText;
+    /** EditText field to enter the product price */
+    private EditText mPriceEditText;
+
+    /** EditText field to enter the product quantity */
+    private EditText mQuantityEditText;
 
     /** EditText field to enter the pet's gender */
     private Spinner mGenderSpinner;
@@ -100,28 +103,30 @@ public class EditorActivity extends AppCompatActivity implements
 
         //handle the Uri having no data
         if (localCurrentProductUri == null){
-            //this is a new pet, set title to Add a Pet
-            setTitle(getString(R.string.editor_activity_title_new_pet));
+            //this is a new pet, set title to Add a Product
+            setTitle(getString(R.string.editor_activity_title_new_product));
             // Invalidate the options menu, so the "Delete" menu option can be hidden.
             // (It doesn't make sense to delete a pet that hasn't been created yet.)
             invalidateOptionsMenu();
         }
         else {
-            setTitle(getString(R.string.editor_activity_title_edit_pet));
+            setTitle(getString(R.string.editor_activity_title_edit_product));
             // Initialize a loader to read the pet data from the database
             // and display the current values in the editor
             getLoaderManager().initLoader(EXISTING_PRODUCT_LOADER, null, this);
         }
 
         // Find all relevant views that we will need to read user input from
-        mNameEditText = (EditText) findViewById(R.id.edit_pet_name);
-        mBreedEditText = (EditText) findViewById(R.id.edit_pet_breed);
-        mWeightEditText = (EditText) findViewById(R.id.edit_pet_weight);
+        mNameEditText = (EditText) findViewById(R.id.edit_product_name);
+        mSupplierEditText = (EditText) findViewById(R.id.edit_product_supplier);
+        mPriceEditText = (EditText) findViewById(R.id.edit_pet_price);
+        mQuantityEditText = (EditText) findViewById(R.id.edit_product_quantity);
         mGenderSpinner = (Spinner) findViewById(R.id.spinner_gender);
 
         mNameEditText.setOnTouchListener(localTouchListener);
-        mBreedEditText.setOnTouchListener(localTouchListener);
-        mWeightEditText.setOnTouchListener(localTouchListener);
+        mSupplierEditText.setOnTouchListener(localTouchListener);
+        mPriceEditText.setOnTouchListener(localTouchListener);
+        mQuantityEditText.setOnTouchListener(localTouchListener);
         mGenderSpinner.setOnTouchListener(localTouchListener);
 
         setupSpinner();
@@ -174,12 +179,13 @@ public class EditorActivity extends AppCompatActivity implements
         // Read from input fields
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
-        String breedString = mBreedEditText.getText().toString().trim();
-        String weightString = mWeightEditText.getText().toString().trim();
-        // Check if this is supposed to be a new pet
+        String supplierString = mSupplierEditText.getText().toString().trim();
+        String weightString = mPriceEditText.getText().toString().trim();
+        String quantityString = mQuantityEditText.getText().toString().trim();
+        // Check if this is supposed to be a new product
         // and check if all the fields in the editor are blank
         if (localCurrentProductUri == null && TextUtils.isEmpty(weightString) && mGender == ProductContract.ProductEntry.GENDER_UNKNOWN) {
-            // Since no fields were modified, we can return early without creating a new pet.
+            // Since no fields were modified, we can return early without creating a new product.
             // No need to create ContentValues and no need to do any ContentProvider operations.
             return;
         }
@@ -188,15 +194,16 @@ public class EditorActivity extends AppCompatActivity implements
         // and pet attributes from the editor are the values.
         ContentValues values = new ContentValues();
         values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME, nameString);
-        values.put(ProductEntry.COLUMN_SUPPLIER_NAME, breedString);
+        values.put(ProductEntry.COLUMN_SUPPLIER_NAME, supplierString);
+        values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantityString);
         values.put(ProductEntry.COLUMN_PET_GENDER, mGender);
-        // If the weight is not provided by the user, don't try to parse the string into an
+        // If the price is not provided by the user, don't try to parse the string into an
         // integer value. Use 0 by default.
-        int weight = 0;
+        int price = 0;
         if (!TextUtils.isEmpty(weightString)) {
-            weight = Integer.parseInt(weightString);
+            price = Integer.parseInt(weightString);
         }
-        values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, weight);
+        values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, price);
 
         // Insert a new pet into the provider, returning the content URI for the new pet.
         // Determine if this is a new or existing pet by checking if mCurrentPetUri is null or not
@@ -207,30 +214,30 @@ public class EditorActivity extends AppCompatActivity implements
             // Show a toast message depending on whether or not the insertion was successful.
             if (newUri == null) {
                 // If the new content URI is null, then there was an error with insertion.
-                Toast.makeText(this, getString(R.string.editor_insert_pet_failed),
+                Toast.makeText(this, getString(R.string.editor_insert_product_failed),
                         Toast.LENGTH_SHORT).show();
             }
             else {
                 // Otherwise, the insertion was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.editor_insert_pet_successful),
+                Toast.makeText(this, getString(R.string.editor_insert_product_successful),
                         Toast.LENGTH_SHORT).show();
             }
 
         }
         else {
-            // Otherwise this is an EXISTING pet, so update the pet with content URI: mCurrentPetUri
+            // Otherwise this is an EXISTING product, so update the pet with content URI: mCurrentProductUri
             // and pass in the new ContentValues. Pass in null for the selection and selection args
-            // because mCurrentPetUri will already identify the correct row in the database that
+            // because mCurrentProductUri will already identify the correct row in the database that
             // we want to modify.
             int rowsAffected = getContentResolver().update(localCurrentProductUri, values, null, null);
             // Show a toast message depending on whether or not the update was successful.
             if (rowsAffected == 0) {
                 // If no rows were affected, then there was an error with the update.
-                Toast.makeText(this, getString(R.string.editor_update_pet_failed),
+                Toast.makeText(this, getString(R.string.editor_update_product_failed),
                         Toast.LENGTH_SHORT).show();
             } else {
                 // Otherwise, the update was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.editor_update_pet_successful),
+                Toast.makeText(this, getString(R.string.editor_update_product_successful),
                         Toast.LENGTH_SHORT).show();
             }
         }
@@ -366,18 +373,21 @@ public class EditorActivity extends AppCompatActivity implements
         if (cursor.moveToFirst()) {
             // Find the columns of pet attributes that we're interested in
             int nameColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME);
-            int breedColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_SUPPLIER_NAME);
+            int supplierColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_SUPPLIER_NAME);
             int genderColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PET_GENDER);
-            int weightColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE);
+            int quantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUANTITY);
+            int priceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE);
             // Extract out the value from the Cursor for the given column index
             String name = cursor.getString(nameColumnIndex);
-            String breed = cursor.getString(breedColumnIndex);
+            String supplier = cursor.getString(supplierColumnIndex);
             int gender = cursor.getInt(genderColumnIndex);
-            int weight = cursor.getInt(weightColumnIndex);
+            int quantity = cursor.getInt(quantityColumnIndex);
+            int price = cursor.getInt(priceColumnIndex);
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
-            mBreedEditText.setText(breed);
-            mWeightEditText.setText(Integer.toString(weight));
+            mSupplierEditText.setText(supplier);
+            mQuantityEditText.setText(Integer.toString(quantity));
+            mPriceEditText.setText(Integer.toString(price));
             // Gender is a dropdown spinner, so map the constant value from the database
             // into one of the dropdown options (0 is Unknown, 1 is Male, 2 is Female).
             // Then call setSelection() so that option is displayed on screen as the current selection.
@@ -400,8 +410,9 @@ public class EditorActivity extends AppCompatActivity implements
     public void onLoaderReset(Loader<Cursor> loader) {
         // If the loader is invalidated, clear out all the data from the input fields.
         mNameEditText.setText("");
-        mBreedEditText.setText("");
-        mWeightEditText.setText("");
+        mSupplierEditText.setText("");
+        mPriceEditText.setText("");
+        mQuantityEditText.setText("");
         mGenderSpinner.setSelection(0); // Select "Unknown" gender
 
     }
@@ -417,7 +428,7 @@ public class EditorActivity extends AppCompatActivity implements
     }
     private void showDeleteConfirmationDialog() {
         // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the postitive and negative buttons on the dialog.
+        // for the positive and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.delete_dialog_msg);
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
@@ -455,11 +466,11 @@ public class EditorActivity extends AppCompatActivity implements
             // Show a toast message depending on whether or not the delete was successful.
             if (rowsDeleted == 0) {
                 // If no rows were deleted, then there was an error with the delete.
-                Toast.makeText(this, getString(R.string.editor_delete_pet_failed),
+                Toast.makeText(this, getString(R.string.editor_delete_product_failed),
                         Toast.LENGTH_SHORT).show();
             } else {
                 // Otherwise, the delete was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.editor_delete_pet_successful),
+                Toast.makeText(this, getString(R.string.editor_delete_product_successful),
                         Toast.LENGTH_SHORT).show();
             }
         }

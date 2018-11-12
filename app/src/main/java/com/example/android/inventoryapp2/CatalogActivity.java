@@ -107,7 +107,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
      */
     private void insertPet() {
         // Create a ContentValues object where column names are the keys,
-        // and Toto's pet attributes are the values.
+        // and sample's product attributes are the values.
         ContentValues values = new ContentValues();
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, "Thing");
         values.put(ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME, "Cat Hat Co");
