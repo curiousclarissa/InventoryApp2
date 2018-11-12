@@ -79,7 +79,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 // Form the content URI that represents the specific pet that was clicked on,
                 // by appending the "id" (passed as input to this method) onto the
                 // {@link ProductEntry#CONTENT_URI}.
-                // For example, the URI would be "content://com.example.android.pets/pets/2"
+                // For example, the URI would be "content://com.example.android.inventoryapp/pets/2"
                 // if the pet with ID 2 was clicked on.
                 Uri currentProductUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, id);
 
