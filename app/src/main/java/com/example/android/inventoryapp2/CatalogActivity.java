@@ -103,16 +103,17 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
 
     /**
-     * Helper method to insert hardcoded pet data into the database. For debugging purposes only.
+     * Helper method to insert hardcoded product data into the database. For debugging purposes only.
      */
     private void insertPet() {
         // Create a ContentValues object where column names are the keys,
         // and Toto's pet attributes are the values.
         ContentValues values = new ContentValues();
-        values.put(ProductEntry.COLUMN_PET_NAME, "Toto");
-        values.put(ProductContract.ProductEntry.COLUMN_PET_BREED, "Terrier");
+        values.put(ProductEntry.COLUMN_PRODUCT_NAME, "Thing");
+        values.put(ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME, "Cat Hat Co");
         values.put(ProductContract.ProductEntry.COLUMN_PET_GENDER, ProductContract.ProductEntry.GENDER_MALE);
-        values.put(ProductContract.ProductEntry.COLUMN_PET_WEIGHT, 7);
+        values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, 2);
+        values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, 1);
 
         // Insert a new row for Toto into the provider using the ContentResolver.
         // Use the {@link ProductEntry#CONTENT_URI} to indicate that we want to insert
@@ -157,8 +158,8 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         //Define a projection that specifies the columns from the table we care about.
         String[] projection = {
                 ProductEntry._ID,
-                ProductEntry.COLUMN_PET_NAME,
-                ProductContract.ProductEntry.COLUMN_PET_BREED };
+                ProductEntry.COLUMN_PRODUCT_NAME,
+                ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME};
 
         //This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this, //parent activity context

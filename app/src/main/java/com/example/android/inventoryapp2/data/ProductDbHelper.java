@@ -23,7 +23,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.android.inventoryapp2.data.ProductContract.ProductEntry;
-import com.example.android.inventoryapp2.data.ProductContract;
 
 /**
  * Database helper for Pets app. Manages database creation and version management.
@@ -33,7 +32,7 @@ public class ProductDbHelper extends SQLiteOpenHelper {
     public static final String LOG_TAG = ProductDbHelper.class.getSimpleName();
 
     /** Name of the database file */
-    private static final String DATABASE_NAME = "shelter.db";
+    private static final String DATABASE_NAME = "products.db";
 
     /**
      * Database version. If you change the database schema, you must increment the database version.
@@ -54,13 +53,14 @@ public class ProductDbHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // Create a String that contains the SQL statement to create the pets table
+        // Create a String that contains the SQL statement to create the products table
         String SQL_CREATE_PETS_TABLE =  "CREATE TABLE " + ProductContract.ProductEntry.TABLE_NAME + " ("
                 + ProductEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + ProductEntry.COLUMN_PET_NAME + " TEXT NOT NULL, "
-                + ProductEntry.COLUMN_PET_BREED + " TEXT, "
+                + ProductEntry.COLUMN_PRODUCT_NAME + " TEXT NOT NULL, "
+                + ProductEntry.COLUMN_SUPPLIER_NAME + " TEXT, "
                 + ProductEntry.COLUMN_PET_GENDER + " INTEGER NOT NULL, "
-                + ProductEntry.COLUMN_PET_WEIGHT + " INTEGER NOT NULL DEFAULT 0);";
+                + ProductEntry.COLUMN_PRODUCT_QUANTITY + " INTEGER NOT NULL DEFAULT 0,"
+                + ProductEntry.COLUMN_PRODUCT_PRICE + " INTEGER NOT NULL DEFAULT 0);";
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_PETS_TABLE);

@@ -31,7 +31,7 @@ public final class ProductContract {
     private ProductContract() {}
     public static final String CONTENT_AUTHORITY = "com.example.android.inventoryapp2";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
-    public static final String PATH_PETS = "pets";
+    public static final String PATH_PRODUCTS = "products";
     /**
      * Inner class that defines constant values for the pets database table.
      * Each entry in the table represents a single pet.
@@ -41,13 +41,13 @@ public final class ProductContract {
          * The MIME type of the {@link #CONTENT_URI} for a list of pets.
          */
         public static final String CONTENT_LIST_TYPE =
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PETS;
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PRODUCTS;
 
         /**
          * The MIME type of the {@link #CONTENT_URI} for a single pet.
          */
         public static final String CONTENT_ITEM_TYPE =
-                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PETS;
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PRODUCTS;
 
         /**
          * Returns whether or not the given gender is {@link #GENDER_UNKNOWN}, {@link #GENDER_MALE},
@@ -60,10 +60,10 @@ public final class ProductContract {
             return false;
         }
 
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_PETS);
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_PRODUCTS);
 
-        /** Name of database table for pets */
-        public final static String TABLE_NAME = "pets";
+        /** Name of database table for products */
+        public final static String TABLE_NAME = "products";
 
         /**
          * Unique ID number for the pet (only for use in the database table).
@@ -77,14 +77,14 @@ public final class ProductContract {
          *
          * Type: TEXT
          */
-        public final static String COLUMN_PET_NAME ="name";
+        public final static String COLUMN_PRODUCT_NAME ="name";
 
         /**
-         * Breed of the pet.
+         * supplier of the product.
          *
          * Type: TEXT
          */
-        public final static String COLUMN_PET_BREED = "breed";
+        public final static String COLUMN_SUPPLIER_NAME = "supplier";
 
         /**
          * Gender of the pet.
@@ -97,11 +97,19 @@ public final class ProductContract {
         public final static String COLUMN_PET_GENDER = "gender";
 
         /**
-         * Weight of the pet.
+         * quantity of the product.
+         *
+         * Type: String
+         */
+        public final static String COLUMN_PRODUCT_QUANTITY = "quantity";
+
+        /**
+         * PRICE of the PRODUCT.
          *
          * Type: INTEGER
          */
-        public final static String COLUMN_PET_WEIGHT = "weight";
+        public final static String COLUMN_PRODUCT_PRICE = "price";
+
 
         /**
          * Possible values for the gender of the pet.

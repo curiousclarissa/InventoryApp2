@@ -10,7 +10,6 @@ import android.widget.CursorAdapter;
 import android.widget.TextView;
 
 import com.example.android.inventoryapp2.data.ProductContract;
-import com.example.android.inventoryapp2.R;
 
 /**
  * Created by clarissajarem on 11/9/18.
@@ -59,8 +58,8 @@ public class ProductCursorAdapter extends CursorAdapter {
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
         TextView summaryTextView = (TextView) view.findViewById(R.id.summary);
         // Find the columns of pet attributes that we're interested in
-        int nameColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PET_NAME);
-        int breedColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PET_BREED);
+        int nameColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME);
+        int breedColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME);
         // Read the pet attributes from the Cursor for the current pet
         String petName = cursor.getString(nameColumnIndex);
         String petBreed = cursor.getString(breedColumnIndex);

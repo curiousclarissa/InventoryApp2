@@ -14,23 +14,19 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
-
-import com.example.android.inventoryapp2.data.ProductContract;
-
-import java.security.Provider;
 /**
  * Created by clarissajarem on 11/9/18.
  */
 
 /**
- * {@link ContentProvider} for Pets app.
+ * {@link ContentProvider} for Products app.
  */
 public class ProductProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
+            case PRODUCTS:
                 return insertPet(uri, contentValues);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for " + uri);
@@ -52,7 +48,7 @@ public class ProductProvider extends ContentProvider {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
         }
-        //updating for content://com.example.petsapp.data/pets/row
+        //updating for content://com.example.inventoryapp2.data/products/row
         getContext().getContentResolver().notifyChange(uri, null);
         // Once we know the ID of the new row in the table,
         // return the new URI with the ID appended to the end of it
@@ -68,12 +64,12 @@ public class ProductProvider extends ContentProvider {
      */
     private ProductDbHelper localDbHelper;
     /**
-     * URI matcher code for the content URI for the pets table
+     * URI matcher code for the content URI for the products table
      */
-    private static final int PETS = 100;
+    private static final int PRODUCTS = 100;
 
     /**
-     * URI matcher code for the content URI for a single pet in the pets table
+     * URI matcher code for the content URI for a single pet in the products table
      */
     private static final int PET_ID = 101;
 
@@ -90,8 +86,8 @@ public class ProductProvider extends ContentProvider {
         // should recognize. All paths added to the UriMatcher have a corresponding code to return
         // when a match is found.
 
-        sUriMatcher.addURI(ProductContract.CONTENT_AUTHORITY, ProductContract.PATH_PETS, PETS);
-        sUriMatcher.addURI(ProductContract.CONTENT_AUTHORITY, ProductContract.PATH_PETS + "/#", PET_ID);
+        sUriMatcher.addURI(ProductContract.CONTENT_AUTHORITY, ProductContract.PATH_PRODUCTS, PRODUCTS);
+        sUriMatcher.addURI(ProductContract.CONTENT_AUTHORITY, ProductContract.PATH_PRODUCTS + "/#", PET_ID);
     }
 
     /**
@@ -121,15 +117,15 @@ public class ProductProvider extends ContentProvider {
         // Figure out if the URI matcher can match the URI to a specific code
         int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
-                // For the PETS code, query the pets table directly with the given
+            case PRODUCTS:
+                // For the PRODUCTS code, query the products table directly with the given
                 // projection, selection, selection arguments, and sort order. The cursor
-                // could contain multiple rows of the pets table.
+                // could contain multiple rows of the products table.
                 cursor = database.query(ProductContract.ProductEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             case PET_ID:
                 // For the PET_ID code, extract out the ID from the URI.
-                // For an example URI such as "content://com.example.android.pets/pets/3",
+                // For an example URI such as "content://com.example.android.inventoryapp2/products/3",
                 // the selection will be "_id=?" and the selection argument will be a
                 // String array containing the actual ID of 3 in this case.
                 //
@@ -139,7 +135,7 @@ public class ProductProvider extends ContentProvider {
                 selection = ProductContract.ProductEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
-                // This will perform a query on the pets table where the _id equals 3 to return a
+                // This will perform a query on the products table where the _id equals 3 to return a
                 // Cursor containing that row of the table.
                 cursor = database.query(ProductContract.ProductEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
@@ -160,7 +156,7 @@ public class ProductProvider extends ContentProvider {
                       String[] selectionArgs) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
+            case PRODUCTS:
                 return updatePet(uri, contentValues, selection, selectionArgs);
             case PET_ID:
                 // For the PET_ID code, extract out the ID from the URI,
@@ -181,12 +177,20 @@ public class ProductProvider extends ContentProvider {
      */
     private int updatePet(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
-// If the {@link ProductEntry#COLUMN_PET_NAME} key is present,
+// If the {@link ProductEntry#COLUMN_PRODUCT_NAME} key is present,
         // check that the name value is not null.
-        if (values.containsKey(ProductContract.ProductEntry.COLUMN_PET_NAME)) {
-            String name = values.getAsString(ProductContract.ProductEntry.COLUMN_PET_NAME);
+        if (values.containsKey(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME)) {
+            String name = values.getAsString(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME);
             if (name == null) {
                 throw new IllegalArgumentException("Pet requires a name");
+            }
+        }
+        // If the {@link ProductEntry#COLUMN_SUPPLIEr_NAME} key is present,
+        // check that the name value is not null.
+        if (values.containsKey(ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME)) {
+            String name = values.getAsString(ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME);
+            if (name == null) {
+                throw new IllegalArgumentException("Supplier requires a name");
             }
         }
 
@@ -198,12 +202,25 @@ public class ProductProvider extends ContentProvider {
                 throw new IllegalArgumentException("Pet requires valid gender");
             }
         }
+        // If the {@link ProductEntry#COLUMN_PRODUCT_QUANTITY} key is present,
+        // check that the quantity value is valid.
+        if (values.containsKey(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY)) {
+            // Check that the quantity is greater than or equal to 0 kg
+            Integer quantity = values.getAsInteger(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY);
+            if (quantity != null && quantity < 0) {
+                throw new IllegalArgumentException("Product requires valid quantity");
+            }
+            // If there are no values to update, then don't try to update the database
+            if (values.size() == 0) {
+                return 0;
+            }
+        }
 
-        // If the {@link ProductEntry#COLUMN_PET_WEIGHT} key is present,
+        // If the {@link ProductEntry#COLUMN_PRODUCT_PRICE} key is present,
         // check that the weight value is valid.
-        if (values.containsKey(ProductContract.ProductEntry.COLUMN_PET_WEIGHT)) {
+        if (values.containsKey(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE)) {
             // Check that the weight is greater than or equal to 0 kg
-            Integer weight = values.getAsInteger(ProductContract.ProductEntry.COLUMN_PET_WEIGHT);
+            Integer weight = values.getAsInteger(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE);
             if (weight != null && weight < 0) {
                 throw new IllegalArgumentException("Pet requires valid weight");
             }
@@ -212,6 +229,7 @@ public class ProductProvider extends ContentProvider {
                 return 0;
             }
         }
+
 // Otherwise, get writeable database to update the data
         SQLiteDatabase database = localDbHelper.getWritableDatabase();
 
@@ -239,7 +257,7 @@ public class ProductProvider extends ContentProvider {
 
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
+            case PRODUCTS:
                 //delete all pets that match selection criteria
                 rowsDeleted = database.delete(ProductContract.ProductEntry.TABLE_NAME, selection, selectionArgs);
                 break;
@@ -267,7 +285,7 @@ public class ProductProvider extends ContentProvider {
     public String getType(Uri uri) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case PETS:
+            case PRODUCTS:
                 return ProductContract.ProductEntry.CONTENT_LIST_TYPE;
             case PET_ID:
                 return ProductContract.ProductEntry.CONTENT_ITEM_TYPE;

@@ -187,8 +187,8 @@ public class EditorActivity extends AppCompatActivity implements
         // Create a ContentValues object where column names are the keys,
         // and pet attributes from the editor are the values.
         ContentValues values = new ContentValues();
-        values.put(ProductContract.ProductEntry.COLUMN_PET_NAME, nameString);
-        values.put(ProductEntry.COLUMN_PET_BREED, breedString);
+        values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME, nameString);
+        values.put(ProductEntry.COLUMN_SUPPLIER_NAME, breedString);
         values.put(ProductEntry.COLUMN_PET_GENDER, mGender);
         // If the weight is not provided by the user, don't try to parse the string into an
         // integer value. Use 0 by default.
@@ -196,7 +196,7 @@ public class EditorActivity extends AppCompatActivity implements
         if (!TextUtils.isEmpty(weightString)) {
             weight = Integer.parseInt(weightString);
         }
-        values.put(ProductContract.ProductEntry.COLUMN_PET_WEIGHT, weight);
+        values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, weight);
 
         // Insert a new pet into the provider, returning the content URI for the new pet.
         // Determine if this is a new or existing pet by checking if mCurrentPetUri is null or not
@@ -341,10 +341,11 @@ public class EditorActivity extends AppCompatActivity implements
         // all columns from the pet table
         String[] projection = {
                 ProductEntry._ID,
-                ProductContract.ProductEntry.COLUMN_PET_NAME,
-                ProductContract.ProductEntry.COLUMN_PET_BREED,
+                ProductContract.ProductEntry.COLUMN_PRODUCT_NAME,
+                ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME,
                 ProductEntry.COLUMN_PET_GENDER,
-                ProductContract.ProductEntry.COLUMN_PET_WEIGHT };
+                ProductEntry.COLUMN_PRODUCT_QUANTITY,
+                ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE};
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
                 localCurrentProductUri,         // Query the content URI for the current pet
@@ -364,10 +365,10 @@ public class EditorActivity extends AppCompatActivity implements
         // (This should be the only row in the cursor)
         if (cursor.moveToFirst()) {
             // Find the columns of pet attributes that we're interested in
-            int nameColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PET_NAME);
-            int breedColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PET_BREED);
+            int nameColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME);
+            int breedColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_SUPPLIER_NAME);
             int genderColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PET_GENDER);
-            int weightColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PET_WEIGHT);
+            int weightColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE);
             // Extract out the value from the Cursor for the given column index
             String name = cursor.getString(nameColumnIndex);
             String breed = cursor.getString(breedColumnIndex);
