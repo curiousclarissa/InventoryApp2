@@ -22,6 +22,7 @@ import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -66,6 +67,21 @@ public class EditorActivity extends AppCompatActivity implements
 
     /** EditText field to enter the product quantity */
     private EditText mQuantityEditText;
+
+    /** EditText field to enter the supplier phone */
+    private EditText mSupplierPhoneEditText;
+    /** EditText field to enter the supplier phone */
+    /** sale button */
+
+    private Button mSaleButton;
+    /** add button */
+
+    private Button mAddButton;
+    /** call button */
+    private Button mCallButton;
+
+    /** delete button */
+    private Button mDeleteButton;
 
     /** EditText field to enter the pet's gender */
     private Spinner mTypeSpinner;
@@ -122,30 +138,65 @@ public class EditorActivity extends AppCompatActivity implements
         mNameEditText = (EditText) findViewById(R.id.edit_product_name);
         mSupplierEditText = (EditText) findViewById(R.id.edit_product_supplier);
         mPriceEditText = (EditText) findViewById(R.id.edit_pet_price);
+        mSupplierPhoneEditText = (EditText) findViewById(R.id.edit_supplier_phone);
         mQuantityEditText = (EditText) findViewById(R.id.edit_product_quantity);
+        mSaleButton = (Button) findViewById(R.id.sale_button);
+        mAddButton = (Button) findViewById(R.id.add_button);
+        mCallButton = (Button) findViewById(R.id.call_button);
+        mDeleteButton = (Button) findViewById(R.id.delete_button);
         mTypeSpinner = (Spinner) findViewById(R.id.spinner_type);
 
         mNameEditText.setOnTouchListener(localTouchListener);
         mSupplierEditText.setOnTouchListener(localTouchListener);
         mPriceEditText.setOnTouchListener(localTouchListener);
+        mSupplierPhoneEditText.setOnTouchListener(localTouchListener);
         mQuantityEditText.setOnTouchListener(localTouchListener);
         mTypeSpinner.setOnTouchListener(localTouchListener);
 
+        mSaleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int quantityUpdate = Integer.parseInt(mQuantityEditText.getText().toString());
+                if (quantityUpdate > 0) {
+                    quantityUpdate -= 1;
+                    mQuantityEditText.setText(Integer.toString(quantityUpdate));
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.below_zero_warning, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        mAddButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int quantityUpdate = Integer.parseInt(mQuantityEditText.getText().toString());
+                quantityUpdate += 1;
+                mQuantityEditText.setText(Integer.toString(quantityUpdate));
+            }
+        });
+        mCallButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                PackageManager pm = getPackageManager();
+
+                if (pm.hasSystemFeature(PackageManager.FEATURE_TELEPHONY)){
+                    Intent phoneIntent = new Intent(Intent.ACTION_DIAL);
+                    phoneIntent.setData(Uri.parse("tel:" + mSupplierPhoneEditText.getText()));
+                    startActivity(phoneIntent);
+                }
+
+            }
+        });
+        mDeleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            showDeleteConfirmationDialog();
+            }
+        });
+
         setupSpinner();
     }
-/**
-    setContentView(R.layout.activity_editor);
-    // button to delete single record
-    private Button deleteButton = (Button) findViewById(R.id.delete_button);
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-            showDeleteConfirmationDialog();
-
-        }
-    });
-**/
     /**
      * Setup the dropdown spinner that allows the user to select the gender of the pet.
      */
@@ -194,6 +245,8 @@ public class EditorActivity extends AppCompatActivity implements
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
         String supplierString = mSupplierEditText.getText().toString().trim();
+        String supplierPhoneString = mSupplierPhoneEditText.getText().toString().trim();
+
         String priceString = mPriceEditText.getText().toString().trim();
         String quantityString = mQuantityEditText.getText().toString().trim();
         // Check if this is supposed to be a new product
@@ -210,7 +263,8 @@ public class EditorActivity extends AppCompatActivity implements
         values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME, nameString);
         values.put(ProductEntry.COLUMN_SUPPLIER_NAME, supplierString);
         values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantityString);
-        values.put(ProductEntry.COLUMN_PET_GENDER, mType);
+        values.put(ProductEntry.COLUMN_SUPPLIER_PHONE, supplierPhoneString);
+        values.put(ProductEntry.COLUMN_PRODUCT_TYPE, mType);
         // If the price is not provided by the user, don't try to parse the string into an
         // integer value. Use 0 by default.
         int price = 0;
@@ -364,7 +418,8 @@ public class EditorActivity extends AppCompatActivity implements
                 ProductEntry._ID,
                 ProductContract.ProductEntry.COLUMN_PRODUCT_NAME,
                 ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME,
-                ProductEntry.COLUMN_PET_GENDER,
+                ProductEntry.COLUMN_PRODUCT_TYPE,
+                ProductEntry.COLUMN_SUPPLIER_PHONE,
                 ProductEntry.COLUMN_PRODUCT_QUANTITY,
                 ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE};
         // This loader will execute the ContentProvider's query method on a background thread
@@ -388,18 +443,21 @@ public class EditorActivity extends AppCompatActivity implements
             // Find the columns of pet attributes that we're interested in
             int nameColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME);
             int supplierColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_SUPPLIER_NAME);
-            int genderColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PET_GENDER);
+            int supplierPhoneColmnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_SUPPLIER_PHONE);
+            int genderColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_TYPE);
             int quantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_QUANTITY);
             int priceColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_PRODUCT_PRICE);
             // Extract out the value from the Cursor for the given column index
             String name = cursor.getString(nameColumnIndex);
             String supplier = cursor.getString(supplierColumnIndex);
             int type = cursor.getInt(genderColumnIndex);
+            String phone = cursor.getString(supplierPhoneColmnIndex);
             int quantity = cursor.getInt(quantityColumnIndex);
             int price = cursor.getInt(priceColumnIndex);
             // Update the views on the screen with the values from the database
             mNameEditText.setText(name);
             mSupplierEditText.setText(supplier);
+            mSupplierPhoneEditText.setText(phone);
             mQuantityEditText.setText(Integer.toString(quantity));
             mPriceEditText.setText(Integer.toString(price));
             // Gender is a dropdown spinner, so map the constant value from the database
@@ -426,6 +484,7 @@ public class EditorActivity extends AppCompatActivity implements
         // If the loader is invalidated, clear out all the data from the input fields.
         mNameEditText.setText("");
         mSupplierEditText.setText("");
+        mSupplierPhoneEditText.setText("");
         mPriceEditText.setText("");
         mQuantityEditText.setText("");
         mTypeSpinner.setSelection(0); // Select "Unknown" TYPE

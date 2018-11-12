@@ -111,7 +111,8 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         ContentValues values = new ContentValues();
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, "Thing");
         values.put(ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME, "Cat Hat Co");
-        values.put(ProductContract.ProductEntry.COLUMN_PET_GENDER, ProductContract.ProductEntry.GROCERY);
+        values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_TYPE, ProductContract.ProductEntry.GROCERY);
+        values.put(ProductEntry.COLUMN_SUPPLIER_PHONE, "555-555-5555");
         values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, 2);
         values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, 1);
 
@@ -122,11 +123,11 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         Uri newUri = getContentResolver().insert(ProductContract.ProductEntry.CONTENT_URI, values);
     }
     /**
-     * Helper method to delete all pets in the database.
+     * Helper method to delete all products in the database.
      */
     private void deleteAllPets() {
         int rowsDeleted = getContentResolver().delete(ProductContract.ProductEntry.CONTENT_URI, null, null);
-        Log.v("CatalogActivity", rowsDeleted + " rows deleted from pet database");
+        Log.v("CatalogActivity", rowsDeleted + " rows deleted from products database");
     }
 
     @Override

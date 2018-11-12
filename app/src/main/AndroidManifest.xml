@@ -30,5 +30,6 @@
             android:authorities="com.example.android.inventoryapp2"
             android:exported="false" />
     </application>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
 </manifest>

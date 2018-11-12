@@ -85,7 +85,39 @@
 
 
     </LinearLayout>
+    <!-- Supplier phonecategory -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
+        <!-- Label -->
+        <TextView
+            style="@style/CategoryStyle"
+            android:text="@string/category_supplier_phone" />
+
+
+        <!-- Input fields -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/basic_margin">
+
+
+
+            <!-- Supplier field -->
+            <EditText
+                android:id="@+id/edit_supplier_phone"
+                style="@style/EditorFieldStyle"
+                android:hint="@string/hint_supplier_phone"
+                android:inputType="textCapWords" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
     <!-- Type category -->
     <LinearLayout
         android:id="@+id/container_gender"
@@ -184,8 +216,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/large_margin">
+        android:orientation="horizontal">
         <Button
             android:id="@+id/add_button"
             android:layout_width="wrap_content"
@@ -204,6 +235,12 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:textAppearanceButton"
             android:text="@string/delete"/>
+        <Button
+            android:id="@+id/call_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:textAppearanceButton"
+            android:text="@string/button_call"/>
     </LinearLayout>
 
     </LinearLayout>

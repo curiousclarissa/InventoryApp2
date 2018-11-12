@@ -71,14 +71,14 @@ public final class ProductContract {
          */
         public final static String COLUMN_SUPPLIER_NAME = "supplier";
         /**
-         * Gender of the pet.
+         * type of the product.
          *
          * The only possible values are {@link #TYPE_UNKNOWN}, {@link #GROCERY},
          * or {@link #GOODS}.
          *
          * Type: INTEGER
          */
-        public final static String COLUMN_PET_GENDER = "gender";
+        public final static String COLUMN_PRODUCT_TYPE = "type";
         /**
          * quantity of the product.
          *
@@ -92,7 +92,13 @@ public final class ProductContract {
          */
         public final static String COLUMN_PRODUCT_PRICE = "price";
         /**
-         * Possible values for the gender of the pet.
+         * supplier phone
+         *
+         * Type: String
+         */
+        public final static String COLUMN_SUPPLIER_PHONE = "phone";
+        /**
+         * Possible values for the type of the item.
          */
         public static final int TYPE_UNKNOWN = 0;
         public static final int GROCERY = 1;
@@ -102,8 +108,8 @@ public final class ProductContract {
          * Returns whether or not the given gender is {@link #TYPE_UNKNOWN}, {@link #GROCERY},
          * or {@link #GOODS}.
          */
-        public static boolean isValidGender(int gender) {
-            if (gender == TYPE_UNKNOWN || gender == GROCERY || gender == GOODS) {
+        public static boolean isValidType(int type) {
+            if (type == TYPE_UNKNOWN || type == GROCERY || type == GOODS) {
                 return true;
             }
             return false;

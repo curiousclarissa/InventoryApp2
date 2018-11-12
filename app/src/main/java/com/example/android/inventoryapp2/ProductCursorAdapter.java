@@ -60,7 +60,7 @@ public class ProductCursorAdapter extends CursorAdapter {
         // Find the columns of pet attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME);
         int supplierColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME);
-        // Read the pet attributes from the Cursor for the current pet
+        // Read the product attributes from the Cursor for the current pet
         String productName = cursor.getString(nameColumnIndex);
         String productSupplier = cursor.getString(supplierColumnIndex);
         // If the pet breed is empty string or null, then use some default text

@@ -192,13 +192,21 @@ public class ProductProvider extends ContentProvider {
                 throw new IllegalArgumentException("Supplier requires a name");
             }
         }
+        // If the {@link ProductEntry#COLUMN_SUPPLIER_PHONE} key is present,
+        // check that the name value is not null.
+        if (values.containsKey(ProductContract.ProductEntry.COLUMN_SUPPLIER_PHONE)) {
+            String name = values.getAsString(ProductContract.ProductEntry.COLUMN_SUPPLIER_PHONE);
+            if (name == null) {
+                throw new IllegalArgumentException("Supplier requires a phone");
+            }
+        }
 
         // If the {@link ProductEntry#COLUMN_P_GENDER} key is present,
         // check that the gender value is valid.
-        if (values.containsKey(ProductContract.ProductEntry.COLUMN_PET_GENDER)) {
-            Integer gender = values.getAsInteger(ProductContract.ProductEntry.COLUMN_PET_GENDER);
-            if (gender == null || !ProductContract.ProductEntry.isValidGender(gender)) {
-                throw new IllegalArgumentException("Pet requires valid gender");
+        if (values.containsKey(ProductContract.ProductEntry.COLUMN_PRODUCT_TYPE)) {
+            Integer gender = values.getAsInteger(ProductContract.ProductEntry.COLUMN_PRODUCT_TYPE);
+            if (gender == null || !ProductContract.ProductEntry.isValidType(gender)) {
+                throw new IllegalArgumentException("Product requires valid type");
             }
         }
         // If the {@link ProductEntry#COLUMN_PRODUCT_QUANTITY} key is present,
