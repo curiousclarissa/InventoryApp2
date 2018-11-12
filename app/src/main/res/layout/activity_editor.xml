@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:orientation="vertical"
-            android:paddingLeft="4dp">
+            android:paddingLeft="@dimen/basic_margin">
 
             <!-- Name field -->
             <EditText
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:orientation="vertical"
-            android:paddingLeft="4dp">
+            android:paddingLeft="@dimen/basic_margin">
 
 
 
@@ -86,7 +86,7 @@
 
     </LinearLayout>
 
-    <!-- Gender category -->
+    <!-- Type category -->
     <LinearLayout
         android:id="@+id/container_gender"
         android:layout_width="match_parent"
@@ -96,7 +96,7 @@
         <!-- Label -->
         <TextView
             style="@style/CategoryStyle"
-            android:text="@string/category_gender" />
+            android:text="@string/category_type" />
 
         <!-- Input field -->
         <LinearLayout
@@ -110,7 +110,7 @@
                 android:id="@+id/spinner_type"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:paddingRight="16dp"
+                android:paddingRight="@dimen/activity_margin"
                 android:spinnerMode="dropdown"/>
         </LinearLayout>
     </LinearLayout>
@@ -132,7 +132,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:paddingLeft="4dp">
+            android:paddingLeft="@dimen/basic_margin">
 
             <!-- Weight field -->
             <EditText
@@ -148,7 +148,10 @@
                 android:text="@string/unit_product_price"/>
         </RelativeLayout>
     </LinearLayout>
-
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
     <!-- Quantity category -->
     <LinearLayout
         android:id="@+id/container_quantity"
@@ -166,7 +169,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:paddingLeft="4dp">
+            android:paddingLeft="@dimen/basic_margin">
 
             <!-- Weight field -->
             <EditText
@@ -174,21 +177,34 @@
                 style="@style/EditorFieldStyle"
                 android:hint="@string/hint_product_quantity"
                 android:inputType="number" />
-            <Button
-                android:id="@+id/add_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/edit_product_quantity"
-                android:text="@string/button_add"/>
-            <Button
-                android:id="@+id/sale_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/add_button"
-                android:layout_below="@id/edit_product_quantity"
-                android:textAppearance="?android:textAppearanceButton"
-                android:text="@string/button_sale"/>
 
         </RelativeLayout>
+
+            </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/large_margin">
+        <Button
+            android:id="@+id/add_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/edit_product_quantity"
+            android:text="@string/button_add"/>
+        <Button
+            android:id="@+id/sale_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:textAppearanceButton"
+            android:text="@string/button_sale"/>
+        <Button
+            android:id="@+id/delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:textAppearanceButton"
+            android:text="@string/delete"/>
+    </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

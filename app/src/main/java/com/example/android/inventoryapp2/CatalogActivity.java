@@ -62,15 +62,15 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
             }
         });
         //Find the listview which will be populated with the pet data
-        ListView petListView = (ListView) findViewById(R.id.list_view_product);
+        ListView productListView = (ListView) findViewById(R.id.list_view_product);
         //Find and use the emptyview on the ListView, so that it only shows when the list has 0 items
         View emptyView = findViewById(R.id.empty_view);
-        petListView.setEmptyView(emptyView);
+        productListView.setEmptyView(emptyView);
         //set up adapter
         localCursorAdapter = new ProductCursorAdapter(this, null);
-        petListView.setAdapter(localCursorAdapter);
+        productListView.setAdapter(localCursorAdapter);
 
-        petListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        productListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 // Create new intent to go to {@link EditorActivity}
@@ -111,7 +111,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         ContentValues values = new ContentValues();
         values.put(ProductEntry.COLUMN_PRODUCT_NAME, "Thing");
         values.put(ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME, "Cat Hat Co");
-        values.put(ProductContract.ProductEntry.COLUMN_PET_GENDER, ProductContract.ProductEntry.GENDER_MALE);
+        values.put(ProductContract.ProductEntry.COLUMN_PET_GENDER, ProductContract.ProductEntry.GROCERY);
         values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, 2);
         values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, 1);
 

@@ -40,7 +40,7 @@
     <string name="category_overview">Product</string>
 
     <!-- Label for gender information in the editor [CHAR LIMIT=30] -->
-    <string name="category_gender">Gender</string>
+    <string name="category_type">Type</string>
     <!-- Label for supplier information in the editor [CHAR LIMIT=30] -->
     <string name="category_supplier">Supplier</string>
 
@@ -80,7 +80,7 @@
     <!-- Label for failed adding product in editor -->
     <string name="editor_update_product_failed">Error with updating product</string>
     <!-- Label for success adding product in editor -->
-    <string name="editor_update_product_successful">Pet updated</string>
+    <string name="editor_update_product_successful">Product updated</string>
     <!-- Title text for the empty view, which describes the empty database image [CHAR LIMIT=50] -->
     <string name="empty_view_title_text">No Products to Display</string>
 

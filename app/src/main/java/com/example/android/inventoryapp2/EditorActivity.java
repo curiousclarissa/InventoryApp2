@@ -34,6 +34,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -69,12 +70,13 @@ public class EditorActivity extends AppCompatActivity implements
     /** EditText field to enter the pet's gender */
     private Spinner mTypeSpinner;
 
+
     /**
      * Gender of the pet. The possible valid values are in the ProductContract.java file:
-     * {@link ProductContract.ProductEntry#GENDER_UNKNOWN}, {@link ProductContract.ProductEntry#GENDER_MALE}, or
-     * {@link ProductEntry#GENDER_FEMALE}.
+     * {@link ProductContract.ProductEntry#TYPE_UNKNOWN}, {@link ProductContract.ProductEntry#GROCERY}, or
+     * {@link ProductEntry#GOODS}.
      */
-    private int mGender = ProductEntry.GENDER_UNKNOWN;
+    private int mType = ProductEntry.TYPE_UNKNOWN;
     /** Boolean flag that keeps track of whether the pet has been edited (true) or not (false) */
     private boolean localProductHasChanged = false;
 
@@ -131,7 +133,19 @@ public class EditorActivity extends AppCompatActivity implements
 
         setupSpinner();
     }
+/**
+    setContentView(R.layout.activity_editor);
+    // button to delete single record
+    private Button deleteButton = (Button) findViewById(R.id.delete_button);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
 
+            showDeleteConfirmationDialog();
+
+        }
+    });
+**/
     /**
      * Setup the dropdown spinner that allows the user to select the gender of the pet.
      */
@@ -154,11 +168,11 @@ public class EditorActivity extends AppCompatActivity implements
                 String selection = (String) parent.getItemAtPosition(position);
                 if (!TextUtils.isEmpty(selection)) {
                     if (selection.equals(getString(R.string.type_grocery))) {
-                        mGender = ProductEntry.GENDER_MALE;
+                        mType = ProductEntry.GROCERY;
                     } else if (selection.equals(getString(R.string.type_goods))) {
-                        mGender = ProductEntry.GENDER_FEMALE;
+                        mType = ProductEntry.GOODS;
                     } else {
-                        mGender = ProductContract.ProductEntry.GENDER_UNKNOWN;
+                        mType = ProductContract.ProductEntry.TYPE_UNKNOWN;
                     }
                 }
             }
@@ -166,7 +180,7 @@ public class EditorActivity extends AppCompatActivity implements
             // Because AdapterView is an abstract class, onNothingSelected must be defined
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                mGender = ProductContract.ProductEntry.GENDER_UNKNOWN;
+                mType = ProductContract.ProductEntry.TYPE_UNKNOWN;
             }
         });
     }
@@ -180,28 +194,28 @@ public class EditorActivity extends AppCompatActivity implements
         // Use trim to eliminate leading or trailing white space
         String nameString = mNameEditText.getText().toString().trim();
         String supplierString = mSupplierEditText.getText().toString().trim();
-        String weightString = mPriceEditText.getText().toString().trim();
+        String priceString = mPriceEditText.getText().toString().trim();
         String quantityString = mQuantityEditText.getText().toString().trim();
         // Check if this is supposed to be a new product
         // and check if all the fields in the editor are blank
-        if (localCurrentProductUri == null && TextUtils.isEmpty(weightString) && mGender == ProductContract.ProductEntry.GENDER_UNKNOWN) {
+        if (localCurrentProductUri == null && TextUtils.isEmpty(priceString) && mType == ProductContract.ProductEntry.TYPE_UNKNOWN) {
             // Since no fields were modified, we can return early without creating a new product.
             // No need to create ContentValues and no need to do any ContentProvider operations.
             return;
         }
 
         // Create a ContentValues object where column names are the keys,
-        // and pet attributes from the editor are the values.
+        // and product attributes from the editor are the values.
         ContentValues values = new ContentValues();
         values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME, nameString);
         values.put(ProductEntry.COLUMN_SUPPLIER_NAME, supplierString);
         values.put(ProductEntry.COLUMN_PRODUCT_QUANTITY, quantityString);
-        values.put(ProductEntry.COLUMN_PET_GENDER, mGender);
+        values.put(ProductEntry.COLUMN_PET_GENDER, mType);
         // If the price is not provided by the user, don't try to parse the string into an
         // integer value. Use 0 by default.
         int price = 0;
-        if (!TextUtils.isEmpty(weightString)) {
-            price = Integer.parseInt(weightString);
+        if (!TextUtils.isEmpty(priceString)) {
+            price = Integer.parseInt(priceString);
         }
         values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE, price);
 
@@ -290,7 +304,7 @@ public class EditorActivity extends AppCompatActivity implements
                 return true;
             // Respond to a click on the "Up" arrow button in the app bar
             case android.R.id.home:
-                // If the pet hasn't changed, continue with navigating up to parent activity
+                // If the product hasn't changed, continue with navigating up to parent activity
                 // which is the {@link CatalogActivity}.
                 if (!localProductHasChanged) {
                     NavUtils.navigateUpFromSameTask(EditorActivity.this);
@@ -380,7 +394,7 @@ public class EditorActivity extends AppCompatActivity implements
             // Extract out the value from the Cursor for the given column index
             String name = cursor.getString(nameColumnIndex);
             String supplier = cursor.getString(supplierColumnIndex);
-            int gender = cursor.getInt(genderColumnIndex);
+            int type = cursor.getInt(genderColumnIndex);
             int quantity = cursor.getInt(quantityColumnIndex);
             int price = cursor.getInt(priceColumnIndex);
             // Update the views on the screen with the values from the database
@@ -391,14 +405,15 @@ public class EditorActivity extends AppCompatActivity implements
             // Gender is a dropdown spinner, so map the constant value from the database
             // into one of the dropdown options (0 is Unknown, 1 is Male, 2 is Female).
             // Then call setSelection() so that option is displayed on screen as the current selection.
-            switch (gender) {
-                case ProductContract.ProductEntry.GENDER_MALE:
+            switch (type) {
+                case ProductContract.ProductEntry.GROCERY:
                     mTypeSpinner.setSelection(1);
                     break;
-                case ProductEntry.GENDER_FEMALE:
+                case ProductEntry.GOODS:
                     mTypeSpinner.setSelection(2);
                     break;
                 default:
+
                     mTypeSpinner.setSelection(0);
                     break;
             }
@@ -413,13 +428,13 @@ public class EditorActivity extends AppCompatActivity implements
         mSupplierEditText.setText("");
         mPriceEditText.setText("");
         mQuantityEditText.setText("");
-        mTypeSpinner.setSelection(0); // Select "Unknown" gender
+        mTypeSpinner.setSelection(0); // Select "Unknown" TYPE
 
     }
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        // If this is a new pet, hide the "Delete" menu item.
+        // If this is a new PRODUCT, hide the "Delete" menu item.
         if (localCurrentProductUri == null) {
             MenuItem menuItem = menu.findItem(R.id.action_delete);
             menuItem.setVisible(false);
@@ -456,7 +471,7 @@ public class EditorActivity extends AppCompatActivity implements
      * Perform the deletion of the pet in the database.
      */
     private void deletePet() {
-        // Only perform the delete if this is an existing pet.
+        // Only perform the delete if this is an existing product.
         if (localCurrentProductUri != null) {
             // Call the ContentResolver to delete the pet at the given content URI.
             // Pass in null for the selection and selection args because the mCurrentPetUri
