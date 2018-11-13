@@ -254,7 +254,7 @@ public class EditorActivity extends AppCompatActivity implements
         // Check if this is supposed to be a new product
         // and check if all the fields in the editor are blank
 
-        if (localCurrentProductUri == null && TextUtils.isEmpty(priceString) || mType == ProductContract.ProductEntry.TYPE_UNKNOWN || TextUtils.isEmpty(nameString) || TextUtils.isEmpty(supplierPhoneString) || TextUtils.isEmpty(quantityString)) {
+        if (TextUtils.isEmpty(priceString) || mType == ProductContract.ProductEntry.TYPE_UNKNOWN || TextUtils.isEmpty(nameString) || TextUtils.isEmpty(supplierPhoneString) || TextUtils.isEmpty(quantityString)) {
             // Since no fields were modified, we can return early without creating a new product.
             // No need to create ContentValues and no need to do any ContentProvider operations.
             Toast.makeText(this, R.string.unsaved_missing_data,

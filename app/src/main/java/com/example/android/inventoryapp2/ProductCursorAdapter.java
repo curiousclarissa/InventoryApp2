@@ -1,7 +1,10 @@
 package com.example.android.inventoryapp2;
 
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,12 +60,13 @@ public class ProductCursorAdapter extends CursorAdapter {
      *                correct row.
      */
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, Cursor cursor) {
         // Find individual views that we want to modify in the list item layout
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
         TextView summaryTextView = (TextView) view.findViewById(R.id.supplier);
         TextView productPriceTextView = view.findViewById(R.id.list_price);
         final TextView productQtyTextView = (TextView) view.findViewById(R.id.list_quantity);
+        final int idIndex = cursor.getColumnIndex(ProductContract.ProductEntry._ID);
 
         // Find the columns of product attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME);
@@ -93,7 +97,13 @@ public class ProductCursorAdapter extends CursorAdapter {
             public void onClick(View view) {
                 int quantityUpdate = Integer.parseInt(productQuantity);
                 if (quantityUpdate > 0) {
+                    // Create a ContentValues object where column names are the keys,
+                    // and product attributes from the editor are the values.
+                    ContentValues values = new ContentValues();
                     quantityUpdate -= 1;
+                    values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, quantityUpdate);
+                    Uri newUri = ContentUris.withAppendedId(ProductContract.ProductEntry.CONTENT_URI, idIndex);
+                    context.getContentResolver().update(newUri, values, null, null);
                     productQtyTextView.setText(Integer.toString(quantityUpdate));
                 } else {
                     Toast.makeText(view.getContext(), R.string.below_zero_warning, Toast.LENGTH_SHORT).show();
