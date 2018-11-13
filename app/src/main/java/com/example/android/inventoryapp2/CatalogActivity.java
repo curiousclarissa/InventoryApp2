@@ -105,7 +105,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     /**
      * Helper method to insert hardcoded product data into the database. For debugging purposes only.
      */
-    private void insertPet() {
+    private void insertProduct() {
         // Create a ContentValues object where column names are the keys,
         // and sample's product attributes are the values.
         ContentValues values = new ContentValues();
@@ -125,7 +125,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     /**
      * Helper method to delete all products in the database.
      */
-    private void deleteAllPets() {
+    private void deleteAllProducts() {
         int rowsDeleted = getContentResolver().delete(ProductContract.ProductEntry.CONTENT_URI, null, null);
         Log.v("CatalogActivity", rowsDeleted + " rows deleted from products database");
     }
@@ -144,11 +144,11 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         switch (item.getItemId()) {
             // Respond to a click on the "Insert dummy data" menu option
             case R.id.action_insert_dummy_data:
-                insertPet();
+                insertProduct();
                 return true;
             // Respond to a click on the "Delete all entries" menu option
             case R.id.action_delete_all_entries:
-                deleteAllPets();
+                deleteAllProducts();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -160,7 +160,9 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         String[] projection = {
                 ProductEntry._ID,
                 ProductEntry.COLUMN_PRODUCT_NAME,
-                ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME};
+                ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME,
+                ProductEntry.COLUMN_PRODUCT_PRICE,
+                ProductEntry.COLUMN_PRODUCT_QUANTITY};
 
         //This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this, //parent activity context

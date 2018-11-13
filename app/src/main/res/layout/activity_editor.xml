@@ -112,7 +112,7 @@
                 android:id="@+id/edit_supplier_phone"
                 style="@style/EditorFieldStyle"
                 android:hint="@string/hint_supplier_phone"
-                android:inputType="textCapWords" />
+                android:inputType="phone" />
 
         </LinearLayout>
 
@@ -227,20 +227,20 @@
             android:id="@+id/sale_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceButton"
-            android:text="@string/button_sale"/>
+            android:text="@string/button_sale"
+            android:textAppearance="?android:textAppearanceButton" />
         <Button
             android:id="@+id/delete_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceButton"
-            android:text="@string/delete"/>
+            android:text="@string/delete"
+            android:textAppearance="?android:textAppearanceButton" />
         <Button
             android:id="@+id/call_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:textAppearanceButton"
-            android:text="@string/button_call"/>
+            android:text="@string/button_call"
+            android:textAppearance="?android:textAppearanceButton" />
     </LinearLayout>
 
     </LinearLayout>

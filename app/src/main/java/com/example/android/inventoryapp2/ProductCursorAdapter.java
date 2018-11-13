@@ -6,10 +6,14 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.inventoryapp2.data.ProductContract;
+
+import static java.lang.String.valueOf;
 
 /**
  * Created by clarissajarem on 11/9/18.
@@ -56,13 +60,22 @@ public class ProductCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         // Find individual views that we want to modify in the list item layout
         TextView nameTextView = (TextView) view.findViewById(R.id.name);
-        TextView summaryTextView = (TextView) view.findViewById(R.id.summary);
-        // Find the columns of pet attributes that we're interested in
+        TextView summaryTextView = (TextView) view.findViewById(R.id.supplier);
+        TextView productPriceTextView = view.findViewById(R.id.list_price);
+        final TextView productQtyTextView = (TextView) view.findViewById(R.id.list_quantity);
+
+        // Find the columns of product attributes that we're interested in
         int nameColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_NAME);
         int supplierColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME);
+        int productPriceColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE);
+        int productQtyColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY);
+
+
         // Read the product attributes from the Cursor for the current pet
         String productName = cursor.getString(nameColumnIndex);
         String productSupplier = cursor.getString(supplierColumnIndex);
+        String productPrice = cursor.getString(productPriceColumnIndex);
+        final String productQuantity = cursor.getString(productQtyColumnIndex);
         // If the pet breed is empty string or null, then use some default text
         // that says "Unknown breed", so the TextView isn't blank.
         if (TextUtils.isEmpty(productSupplier)) {
@@ -71,5 +84,23 @@ public class ProductCursorAdapter extends CursorAdapter {
         // Update the TextViews with the attributes for the current product
         nameTextView.setText(productName);
         summaryTextView.setText(productSupplier);
+        productPriceTextView.setText(productPrice);
+        productQtyTextView.setText(productQuantity);
+        Button saleButton2 = view.findViewById(R.id.sale_button2);
+        saleButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int qtyIndexInt = Integer.parseInt(productQuantity);
+                qtyIndexInt = qtyIndexInt - 1;
+                if (qtyIndexInt < 0) {
+                    Toast toast = Toast.makeText(view.getContext(), "no more available", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+                productQtyTextView.setText(valueOf(qtyIndexInt));
+
+            }
+        });
     }
+
 }
+
