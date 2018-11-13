@@ -96,7 +96,7 @@ public class ProductCursorAdapter extends CursorAdapter {
                     quantityUpdate -= 1;
                     productQtyTextView.setText(Integer.toString(quantityUpdate));
                 } else {
-                    Toast.makeText(this, R.string.below_zero_warning, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(), R.string.below_zero_warning, Toast.LENGTH_SHORT).show();
                 }
             }
         });
