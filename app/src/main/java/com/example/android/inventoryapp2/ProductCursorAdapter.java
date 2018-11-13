@@ -81,6 +81,7 @@ public class ProductCursorAdapter extends CursorAdapter {
         if (TextUtils.isEmpty(productSupplier)) {
             productSupplier = context.getString(R.string.unknown_supplier);
         }
+
         // Update the TextViews with the attributes for the current product
         nameTextView.setText(productName);
         summaryTextView.setText(productSupplier);
@@ -90,17 +91,17 @@ public class ProductCursorAdapter extends CursorAdapter {
         saleButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int qtyIndexInt = Integer.parseInt(productQuantity);
-                qtyIndexInt = qtyIndexInt - 1;
-                if (qtyIndexInt < 0) {
-                    Toast toast = Toast.makeText(view.getContext(), "no more available", Toast.LENGTH_LONG);
-                    toast.show();
+                int quantityUpdate = Integer.parseInt(productQuantity);
+                if (quantityUpdate > 0) {
+                    quantityUpdate -= 1;
+                    productQtyTextView.setText(Integer.toString(quantityUpdate));
+                } else {
+                    Toast.makeText(this, R.string.below_zero_warning, Toast.LENGTH_SHORT).show();
                 }
-                productQtyTextView.setText(valueOf(qtyIndexInt));
-
             }
         });
     }
+
 
 }
 

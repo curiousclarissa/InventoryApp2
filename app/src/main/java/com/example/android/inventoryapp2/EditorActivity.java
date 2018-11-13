@@ -174,6 +174,7 @@ public class EditorActivity extends AppCompatActivity implements
                 mQuantityEditText.setText(Integer.toString(quantityUpdate));
             }
         });
+
         mCallButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
