@@ -184,6 +184,8 @@ public class EditorActivity extends AppCompatActivity implements
                     Intent phoneIntent = new Intent(Intent.ACTION_DIAL);
                     phoneIntent.setData(Uri.parse("tel:" + mSupplierPhoneEditText.getText()));
                     startActivity(phoneIntent);
+                } else {
+                    Toast.makeText(getApplicationContext(), R.string.action_warn_no_phone, Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -246,14 +248,16 @@ public class EditorActivity extends AppCompatActivity implements
         String nameString = mNameEditText.getText().toString().trim();
         String supplierString = mSupplierEditText.getText().toString().trim();
         String supplierPhoneString = mSupplierPhoneEditText.getText().toString().trim();
-
         String priceString = mPriceEditText.getText().toString().trim();
         String quantityString = mQuantityEditText.getText().toString().trim();
         // Check if this is supposed to be a new product
         // and check if all the fields in the editor are blank
-        if (localCurrentProductUri == null && TextUtils.isEmpty(priceString) && mType == ProductContract.ProductEntry.TYPE_UNKNOWN) {
+
+        if (localCurrentProductUri == null && TextUtils.isEmpty(priceString) || mType == ProductContract.ProductEntry.TYPE_UNKNOWN || TextUtils.isEmpty(nameString) || TextUtils.isEmpty(supplierPhoneString) || TextUtils.isEmpty(quantityString)) {
             // Since no fields were modified, we can return early without creating a new product.
             // No need to create ContentValues and no need to do any ContentProvider operations.
+            Toast.makeText(this, R.string.unsaved_missing_data,
+                    Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -508,7 +512,7 @@ public class EditorActivity extends AppCompatActivity implements
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Delete" button, so delete the pet.
-                deletePet();
+                deleteProduct();
             }
         });
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -529,7 +533,7 @@ public class EditorActivity extends AppCompatActivity implements
     /**
      * Perform the deletion of the pet in the database.
      */
-    private void deletePet() {
+    private void deleteProduct() {
         // Only perform the delete if this is an existing product.
         if (localCurrentProductUri != null) {
             // Call the ContentResolver to delete the pet at the given content URI.

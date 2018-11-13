@@ -99,6 +99,8 @@
     <string name="empty_view_subtitle_text">Get started by adding a product</string>
     <!-- Dialog message when user is leaving editor but hasn't saved changes [CHAR LIMIT=NONE] -->
     <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
+    <!-- Dialog message when user is missing data [CHAR LIMIT=NONE] -->
+    <string name="unsaved_missing_data">Can not save due to missing data. Provide values for all fields.</string>
 
     <!-- Dialog button text for the option to discard a user's changes [CHAR LIMIT=20] -->
     <string name="discard">Discard</string>
