@@ -73,6 +73,7 @@ public class ProductCursorAdapter extends CursorAdapter {
         int supplierColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_SUPPLIER_NAME);
         int productPriceColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_PRICE);
         int productQtyColumnIndex = cursor.getColumnIndex(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY);
+        final int id = cursor.getInt(idIndex);
 
 
         // Read the product attributes from the Cursor for the current pet
@@ -102,7 +103,7 @@ public class ProductCursorAdapter extends CursorAdapter {
                     ContentValues values = new ContentValues();
                     quantityUpdate -= 1;
                     values.put(ProductContract.ProductEntry.COLUMN_PRODUCT_QUANTITY, quantityUpdate);
-                    Uri newUri = ContentUris.withAppendedId(ProductContract.ProductEntry.CONTENT_URI, idIndex);
+                    Uri newUri = ContentUris.withAppendedId(ProductContract.ProductEntry.CONTENT_URI, id);
                     context.getContentResolver().update(newUri, values, null, null);
                     productQtyTextView.setText(Integer.toString(quantityUpdate));
                 } else {
